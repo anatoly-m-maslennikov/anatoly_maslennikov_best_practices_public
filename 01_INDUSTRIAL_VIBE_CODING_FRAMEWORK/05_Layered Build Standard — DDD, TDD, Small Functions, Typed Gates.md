@@ -110,6 +110,7 @@ graph TD
 > | spec-sync | declarative spec ⇄ runtime structure equality | docs-vs-code drift (the spec CANNOT quietly fall behind) |
 > | typing | mypy (strict core) in-suite | hallucinated attributes, Optional leaks, dead branches |
 > | lint | ruff (`F,E9,B,SIM`) in-suite | unused/undefined names, bug-prone patterns, complexity creep |
+> | secret hygiene | `.env*` ignored except examples, secret scanner / pre-commit, redaction tests, no env reads in `domain/` | leaked keys, creds in logs/WAL/status, pure code coupled to private runtime |
 >
 > Plus, for LLM-calling tools specifically: an **injection canary** (a hostile input must stay inside its untrusted fence — deterministic, CI-safe) and **offline evals** as the free tier before token-costing live evals.
 
@@ -138,8 +139,8 @@ graph TD
 > 6. Add one canonical verification command (per [[04_General Build Rules — Tool Code Conventions]]) and put it in CLAUDE.md / AGENTS.md.
 > 7. Prune agent context: remove stale, conflicting, or irrelevant instructions; split large static guidance into focused skills only when the skill runs a real workflow.
 > 8. If the tool handles private data, untrusted content, and external communication, add least-privilege boundaries (per [[04_General Build Rules — Tool Code Conventions]]) plus an injection canary before live use.
-> 9. Pin the CI dependency set (a lock file) and add the property layer over the now-pure core.
-> 10. Shrink PENDING to empty; from then on the standard maintains itself.
+> 9. If the tool uses credentials, add the secret-hygiene gate: `.env*` ignored except examples, scanner/pre-commit, redaction tests, and no env reads from `domain/`.
+> 10. Pin the CI dependency set (a lock file) and add the property layer over the now-pure core.
+> 11. Shrink PENDING to empty; from then on the standard maintains itself.
 
 *Provenance: distilled from repeated tool refactors and best-practice adoption work; pattern canon in [[04_General Build Rules — Tool Code Conventions]]; external grounding in [[06_External Grounding — LLM Power-User Practice]]. All §-examples are invented illustrations, not production code.*
-

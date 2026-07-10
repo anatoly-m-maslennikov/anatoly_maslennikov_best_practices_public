@@ -21,6 +21,7 @@ graph TD
 
 ---
 
+
 ## §1 | The pattern catalog
 
 ¶1 One row per decision: the convention and its canonical name + originator. Reuse the **name**, not a synonym.
@@ -44,6 +45,7 @@ graph TD
 > | Concurrency bounded per pool; bounded retry then degrade | **Bulkhead** (Nygard, *Release It!*) + **admission control / concurrency limiting**; bounded **retry budget** + graceful degradation |
 > | **Classify the failure by recoverability**: RAISE on the unrecoverable (auth / credential / contract) and an **error is NEVER empty data** — a false-empty masquerades as legitimate "no data" and silently corrupts every downstream consumer; but **keep the last-good** value on a genuinely transient re-read | **Fail Fast** (Shore & Fowler, *IEEE Software*, 2004) + **Fail Loud / "Crash Early"** (Hunt & Thomas, *The Pragmatic Programmer*); fail-soft / keep-last-good = control-systems folklore |
 > | **Least-privilege tool boundaries** — private data, untrusted content, and outbound communication do not share one unconstrained path; injection-canary and boundary gates enforced by [[05_Layered Build Standard — DDD, TDD, Small Functions, Typed Gates]] | **principle of least privilege** + prompt-injection containment |
+> | **Secrets are runtime credentials, not ordinary config or state.** `.env` is a local injection mechanism only: never commit it, never copy raw values into specs/logs/WAL/status/LLM prompts, and never let domain logic read `os.environ`; commit `.env.example` with variable names/scopes/dummy values only, load/redact at the adapter/app boundary, fail loud on missing or auth-bad credentials, and prefer OS/cloud/password-manager secret stores for durable services | **Secrets management** + **Twelve-Factor config** (env vars as deployment config, credentials kept out of code) + **least privilege / need-to-know** |
 > | **Be a polite, rate-limited client** of a service you don't own: deliberate inter-submit pacing + a re-read gate (poll an entity at most once per N seconds), so you never hammer a shared external system | **client-side rate-limiting / backpressure** (token- / leaky-bucket pacing) — the outbound, cross-process complement to the in-process **Bulkhead** cap (above) |
 > | Each concurrent unit of work on its own client/session — no shared mutable | **Thread confinement / share-nothing concurrency** |
 > | Decide liveness from **observed progress**, never a remote system's wall-clock | distributed-systems **clock-skew** caution; failure detection by observed progress (heartbeat-style) |
@@ -85,6 +87,7 @@ graph TD
 > - [ ] **Generated code reviewed as draft** — do not ship AI-written code until its architecture, edge cases, and failure modes are understood.
 > - [ ] **Classify failures by recoverability** — RAISE on the unrecoverable (auth/contract), keep-last-good on the transient; an error is NEVER an empty result.
 > - [ ] **Least-privilege boundaries** — isolate private data, untrusted input, and external communication; add approval/logging before combining them, per the enforcement gates in [[05_Layered Build Standard — DDD, TDD, Small Functions, Typed Gates]].
+> - [ ] **Secrets stay boundary-only** — `.env` is local/uncommitted; `.env.example` contains names/scopes/dummy values only; domain code never reads env; logs/WAL/status/LLM prompts redact; missing/bad creds fail loud; durable services use a secret store.
 > - [ ] **Correlate by set-difference** when the sink gives no id — snapshot the id-set, submit, claim the new id on a later poll; serialize per-entity; tolerate registration lag.
 > - [ ] **Be a polite, rate-limited client** — pace submits + gate re-reads to once per N seconds; don't hammer a shared service.
 > - [ ] **Verify the effect, not the status** — confirm the real state by content + smoke test, never an exit-0 / `200`; **one writer per file** (concurrent writers = silent last-write-wins).
@@ -96,4 +99,3 @@ graph TD
 > - [ ] **A regression test for every fixed bug** (fails on old code, passes on the fix), in the same change — per [[02_Eval and Test Plan Patterns — Test Plan Authoring Conventions]].
 
 ---
-
