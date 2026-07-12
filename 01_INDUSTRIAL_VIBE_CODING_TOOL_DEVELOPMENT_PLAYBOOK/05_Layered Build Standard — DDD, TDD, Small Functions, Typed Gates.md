@@ -72,7 +72,7 @@ graph TD
 ¶1 Five moves, in order of leverage: gate-first, pinning test per bug, differential proof for refactors, real-store smokes for storage code, and a property layer over the pure core.
 
 > [!example]- §3 — the five moves
-> 1. **Gate first.** Starting a standard-adoption or a refactor, write the RULE as a failing test before touching code; the rule-test defines "done" mechanically before the code moves.
+> 1. **Gate first — red/green evidence.** Starting a standard-adoption or a refactor, write the RULE as a failing test before touching code; capture the red output (test fails for the right reason), then implement until green output (test passes). If you did not watch the test fail, you do not know whether it tests the right thing. The rule-test defines "done" mechanically before the code moves.
 > 2. **Pinning test per bug.** Every fixed bug ships, in the same change, a test that fails on the old code and passes on the fix. Example: a report tool read `result["note"]` — a key the producer never emitted, so a whole check silently always-failed; the fix came with a test that constructs the producer's real output and asserts the check can pass at all.
 > 3. **Differential proof for refactors.** Moving logic without changing behavior? Run old and new implementations on the same inputs and assert byte-identical output BEFORE deleting the old one.
 > 4. **Real-store smokes.** Mock-only test suites pass while production crashes. Anything that serializes (DB rows, checkpoints, event logs) gets one test against a REAL throwaway store (embedded ClickHouse in a tmp dir, SQLite file). This catches the common failure mode where an in-memory fake passes but the real persistence layer rejects serialization, locking, or schema details.
@@ -123,6 +123,8 @@ graph TD
 > - **One canonical verification command** (`make check`, `uv run pytest`, `npm test`, or equivalent): the agent needs a deterministic pass/fail loop it can run before handing work back.
 > - **Context budget hygiene**: keep AGENTS/CLAUDE/skills short, scoped, and current; stale, contradictory, or repository-wide advice is a bug.
 > - **Workflow-bearing hooks / skills / subagents only**: use them when they enforce a real check, isolate a review, or run a deterministic workflow — not as a static dumping ground for prose.
+> - **Verification-before-completion discipline**: before claiming done, identify the command that proves it, run the full fresh command, read the output and exit code, then report the claim with that evidence. Agent success reports are inputs, not proof.
+> - **Subagent-driven review**: after each implementation task, a fresh reviewer checks spec compliance and quality before handoff; broad whole-branch review happens at the end. No human check-in between tasks unless blocked, ambiguous, or complete; never ignore a blocked status.
 > - **Thesis-style module docstrings** carrying the WHY + spec citations (`09 §4`, decision ids, session ids) — provenance an agent can follow instead of re-deriving intent.
 > - **Commit-after-each-edit, code separate from KG** — small atomic commits survive daemon churn and give the next session a readable ledger of what changed and why.
 

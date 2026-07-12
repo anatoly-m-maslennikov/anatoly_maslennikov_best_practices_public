@@ -46,6 +46,7 @@ graph TD
 > | **Build the test harness with the code** — fake the LLM/clock/network; replay resolved cases; with-/without-LLM; the plan itself is authored per [[02_Eval and Test Plan Patterns — Test Plan Authoring Conventions]] | **test doubles / Humble Object** (Meszaros) + **characterization / golden-master tests** (Feathers, 2004) |
 > | **Encode the spec's invariants as runtime assertions + a view** (e.g. zero duplicate idempotency keys) | **design by contract** (Meyer, Eiffel, 1986) + executable invariant |
 > | **Schedule generic runtime surfaces as milestones, not new rules** — verification, observability, and generic code-build gates appear in the impl plan by reference, not by re-cataloging | [[04_General Build Rules — Tool Code Conventions]] owns the runtime rules; [[05_Layered Build Standard — DDD, TDD, Small Functions, Typed Gates]] owns enforcement |
+> | **Package each implementation as a bounded change folder** — one folder per change with delta specs, implementation plan, and task list; archive the folder after the change is verified and merged | **change-folder / task-archive** packaging (OpenSpec) |
 
 ## §2 | The four load-bearing ones
 
@@ -77,6 +78,7 @@ graph TD
 > - [ ] **Shadow = the live pipeline with writes off**, decisions diffed against `main`.
 > - [ ] **Test harness with the code** — fakes for LLM/clock/network + resolved-case replay, with/without-LLM; **a pinning test per fixed bug** (fails on old code, passes on the fix). Plan it per [[02_Eval and Test Plan Patterns — Test Plan Authoring Conventions]].
 > - [ ] **Agent-verifiable milestone checks** — after each milestone, name the exact command/check the agent runs before continuing.
+> - [ ] **Change-folder packaging** — each implementation lives in a bounded change folder with its delta spec, implementation plan, and task list; archive after verified merge.
 > - [ ] **Spec invariants as runtime assertions** (design by contract) — the spec's "must always hold" lines become checks + a view.
 > - [ ] **Generic runtime rule milestones** — include verification, observability, code-build gates, and health checks by linking to [[04_General Build Rules — Tool Code Conventions]] / [[05_Layered Build Standard — DDD, TDD, Small Functions, Typed Gates]]; do not re-derive them here.
 

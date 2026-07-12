@@ -21,6 +21,8 @@
 > | [Galster et al. — Configuring Agentic AI Coding Tools](https://arxiv.org/abs/2602.14690) (2026) | Repository-level context files, skills, and subagents are becoming the configuration layer for coding agents; adoption is broad but shallow. | 05 directory-scoped AGENTS/CLAUDE files, reusable skills, and avoiding static-instruction-only workflows. |
 > | [dos Santos et al. — Configuration Smells in AGENTS.md Files](https://arxiv.org/abs/2606.15828) (2026) | Agent config files fail through context bloat, leaking irrelevant instructions, conflicting guidance, and lint leakage. | Keep 05 agent ergonomics compact, specific, and testable. |
 > | [Dai et al. — ABTest: Behavior-Driven Testing for AI Coding Agents](https://arxiv.org/abs/2604.03362) (2026) | Agent failures can be mined into repository-grounded behavior tests; coding agents need their own fuzzing/behavioral test layer. | 02 regression/pinning tests and 05 agent-specific gates. |
+> | [OpenSpec](https://github.com/Fission-AI/OpenSpec) — [overview](https://github.com/Fission-AI/OpenSpec/blob/main/docs/overview.md), [writing specs](https://github.com/Fission-AI/OpenSpec/blob/main/docs/writing-specs.md) (2025–) | Delta-spec/change-folder/archive model: specs are current truth; changes are bounded work units with delta specs (`ADDED`/`MODIFIED`/`REMOVED`); archiving folds deltas back into truth. | 01 spec delta conventions, 03 change-folder packaging, and the pipeline notion that specs evolve through bounded, mergeable changes. |
+> | [superpowers](https://github.com/obra/superpowers) — [TDD](https://github.com/obra/superpowers/tree/main/skills/test-driven-development), [verification](https://github.com/obra/superpowers/tree/main/skills/verification-before-completion), [subagent development](https://github.com/obra/superpowers/tree/main/skills/subagent-driven-development) (2025–) | Stricter executable agent skills: red/green TDD evidence, verification-before-completion with fresh command output, and fresh-subagent implementation/review loops. | 02 eval/test-plan rigor, 05 TDD/verification gates, and 05 subagent review workflow. |
 
 ## §2 | How the sources strengthen the 00–05 docs
 
@@ -28,11 +30,11 @@
 > | Doc | External grounding to emphasize |
 > |---|---|
 > | [[00_Tool Development Playbook]] | Karpathy + Anthropic: natural-language programming raises the value of a stage pipeline; fast agentic implementation must be wrapped in spec → test/eval → plan → implementation → gates. |
-> | [[01_Spec Authoring Patterns — Service Spec Conventions]] | Karpathy + Willison: “English as programming language” only works when intent is precise, context is explicit, examples are available, and non-goals are fenced. |
-> | [[02_Eval and Test Plan Patterns — Test Plan Authoring Conventions]] | Anthropic + Shankar + ABTest: give agents runnable checks, assertions, behavior tests, evaluator calibration, and pinning tests before trusting generated code. |
-> | [[03_Implementation Plan Patterns — Service Build Conventions]] | Anthropic + Willison: explore first, plan second, implement third; use safe rungs, chokepoints, and human takeover for unfamiliar/high-risk areas. |
+> | [[01_Spec Authoring Patterns — Service Spec Conventions]] | Karpathy + Willison: “English as programming language” only works when intent is precise, context is explicit, examples are available, and non-goals are fenced. OpenSpec adds specs-as-current-truth and delta-spec changes that archive back into that truth. |
+> | [[02_Eval and Test Plan Patterns — Test Plan Authoring Conventions]] | Anthropic + Shankar + ABTest: give agents runnable checks, assertions, behavior tests, evaluator calibration, and pinning tests before trusting generated code. superpowers sharpens this into red/green evidence and verification-before-completion. |
+> | [[03_Implementation Plan Patterns — Service Build Conventions]] | Anthropic + Willison: explore first, plan second, implement third; use safe rungs, chokepoints, and human takeover for unfamiliar/high-risk areas. OpenSpec adds bounded change folders with proposal/spec/design/tasks that can be archived after verified merge. |
 > | [[04_General Build Rules — Tool Code Conventions]] | Willison + Osmani: AI accelerates drafts, but maintainability comes from small modules, boring dependencies, explicit types, error handling, security review, and tests. |
-> | [[05_Layered Build Standard — DDD, TDD, Small Functions, Typed Gates]] | Anthropic + agent-config research: durable agent ergonomics need concise context files, deterministic hooks, subagents for isolated review, and gates that make correctness visible. |
+> | [[05_Layered Build Standard — DDD, TDD, Small Functions, Typed Gates]] | Anthropic + agent-config research: durable agent ergonomics need concise context files, deterministic hooks, subagents for isolated review, and gates that make correctness visible. superpowers adds strict red/green TDD evidence, completion evidence, and per-task subagent review. |
 
 ## §3 | Applied deltas in the 00–05 docs
 
@@ -44,9 +46,11 @@
 > - **Skills/subagents/hooks must enforce a real workflow** — folded into [[05_Layered Build Standard — DDD, TDD, Small Functions, Typed Gates]] as workflow-bearing hooks/skills/subagents only.
 > - **Design against the lethal trifecta** — folded into [[03_Implementation Plan Patterns — Service Build Conventions]], [[04_General Build Rules — Tool Code Conventions]], and [[05_Layered Build Standard — DDD, TDD, Small Functions, Typed Gates]] as sandboxing, approval gates, logging, least privilege, and injection canaries.
 > - **Expect the 70% problem** — folded into [[00_Tool Development Playbook]] and [[04_General Build Rules — Tool Code Conventions]] as the reason to spend saved agent time on architecture, edge cases, verification, security, observability, and polish.
+> - **OpenSpec delta-spec/change-folder/archive model** — folded into [[01_Spec Authoring Patterns — Service Spec Conventions]] as a named spec-change pattern and into [[03_Implementation Plan Patterns — Service Build Conventions]] as change-folder packaging for implementation plans.
+> - **superpowers strict executable agent skills** — folded into [[02_Eval and Test Plan Patterns — Test Plan Authoring Conventions]] as red/green evidence, verification-before-completion, and subagent-review checkpoints; and into [[05_Layered Build Standard — DDD, TDD, Small Functions, Typed Gates]] as stricter TDD/verification/subagent gates.
 
 ## §4 | Citation hygiene
 
 ¶1 Prefer these sources as links/provenance, not long quotations. The docs should stay as a compact operating standard; third-party material belongs here as a map and in separate source notes if full local copies are needed later.
 
-*Accessed: 2026-07-09.*
+*Accessed: 2026-07-09; OpenSpec and superpowers local repo snapshots checked 2026-07-12.*

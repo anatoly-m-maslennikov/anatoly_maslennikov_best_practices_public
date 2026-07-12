@@ -40,6 +40,9 @@ graph TD
 > | **A property layer over the pure core** — totality (parsers never raise), idempotence (f(f(x)) == f(x)), round-trips (serialize→parse == id), content preservation; derandomize in CI | **property-based testing** (QuickCheck, Claessen & Hughes, 2000; Hypothesis); **derandomized CI** so a counterexample is a failure, not a flake |
 > | **An injection canary for LLM-facing tools** — a hostile input must stay inside its untrusted fence; deterministic, CI-safe | **canary test** for prompt-injection containment |
 > | **Declare the shared gates in the plan** — conformance (function size), purity (layer matrix), spec-sync, mypy, lint run inside the suite | **rules as executable tests** — see [[05_Layered Build Standard — DDD, TDD, Small Functions, Typed Gates]] §5 |
+> | **Capture red/green evidence for test-driven changes** — the plan says where the failing output and passing output will be recorded, so tests prove intent rather than merely passing after the fact | **red-green-refactor** / strict TDD evidence (superpowers) |
+> | **Verification-before-completion — evidence before claims** — before claiming a task is done, run a fresh full verification command, read its output and exit code, verify the claim, then state it with the evidence | **verification-before-completion** (superpowers) |
+> | **Subagent review after each implementation task** — a fresh implementer per bounded task; after each task, a reviewer checks spec compliance and quality before the next task starts | **subagent-driven development** (superpowers) |
 
 ## §2 | The five load-bearing ones
 
@@ -66,6 +69,9 @@ graph TD
 > - [ ] **Serialization smokes** — the list of real-throwaway-store tests (which store, what round-trips).
 > - [ ] **Property layer** — which totality / idempotence / round-trip properties are asserted over the pure core; CI derandomization stated.
 > - [ ] **Agent-runnable verification** — one canonical command/check sequence that returns a readable pass/fail signal after an agent edit.
+> - [ ] **Red/green evidence capture** — every test-driven change records the red output (test fails for the right reason) and green output (test passes after the fix).
+> - [ ] **Verification-before-completion gate** — no task may be called complete until a fresh full verification command has been run, read, and reported with exit status/output.
+> - [ ] **Subagent review checkpoint** — for delegated implementation, each bounded task gets a spec-compliance and quality review before the next task starts.
 > - [ ] **Gates** — the machine gates the suite carries (conformance, purity, spec-sync, mypy, lint) per [[05_Layered Build Standard — DDD, TDD, Small Functions, Typed Gates]]; plus the injection canary if the tool feeds an LLM untrusted text.
 > - [ ] **Adversarial / drift cases** — hostile inputs, prompt-injection canaries, stale-context cases, and regression examples that protect against silent model drift.
 > - [ ] **Pinning policy** — stated: every fixed bug ships a pinning test in the same change; refactors ship a differential proof.

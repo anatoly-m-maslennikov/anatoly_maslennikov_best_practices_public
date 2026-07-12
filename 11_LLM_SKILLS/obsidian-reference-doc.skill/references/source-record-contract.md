@@ -116,4 +116,4 @@ Before replying, verify:
 - For books, `gdrive_path` is present only when the Google Drive file/folder exists; otherwise the note/body and final reply state that the Drive copy is pending.
 - `status` and `yandex_disk` are absent unless explicitly requested.
 - `local_copy` and `gdrive_path` are absent unless their corresponding artifacts exist.
-- No stale nested reference paths such as `81_REFERENCES/20_PROJECTS/...`, `81_REFERENCES/32_LEARNING/11_SOFT_SKILLS/...`, or `81_REFERENCES/53_RESEARCH/32_Knowledge Systems/...` were introduced.
+- No stale nested reference paths such as `81_REFERENCES/...`, `81_REFERENCES/32_LEARNING/...`, or `81_REFERENCES/53_RESEARCH/...` were introduced.

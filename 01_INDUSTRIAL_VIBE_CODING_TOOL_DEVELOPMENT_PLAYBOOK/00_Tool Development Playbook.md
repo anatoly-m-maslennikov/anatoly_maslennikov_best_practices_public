@@ -32,7 +32,7 @@ graph LR
 > | [[03_Implementation Plan Patterns — Service Build Conventions]] | How to turn an accepted spec into a service build plan: read-only exploration, build order, schema/store binding, event log/idempotency, safe-rung rollout, chokepoints, shadow, and milestone checks | You are planning the actual build and rollout of a deployed/resumable service | Generic tool-code pattern catalog or enforcement mechanics |
 > | [[04_General Build Rules — Tool Code Conventions]] | The generic code/runtime rule catalog for any tool: pure core/injected shell, WAL/crash-only restart, reconciliation, rate limits, observability, least privilege, secret handling, failure classification, and named pattern provenance | You need the rule/pattern name and the general coding convention that should apply | A service-specific milestone plan or the exact tests/gates that enforce the rule |
 > | [[05_Layered Build Standard — DDD, TDD, Small Functions, Typed Gates]] | The executable standard: layering gates, small-function ratchets, TDD/pinning tests, strict typed seams, lint/conformance/spec-sync checks, injection canaries, and agent-facing health commands | You need to make 04’s rules mechanically enforceable in a codebase | Re-cataloging the pattern origins already owned by 04, except where a gate needs exact structure |
-> | [[06_External Grounding — LLM Power-User Practice]] | The external source map behind the standard: Karpathy-style Software 3.0 framing, Willison/Anthropic AI-assisted coding practice, eval research, agent safety, and agent-config findings | You need provenance, justification, or candidate improvements grounded in external practice | Local pipeline ownership; it informs 00–05 rather than replacing them |
+> | [[06_External Grounding — LLM Power-User Practice]] | The external source map behind the standard: Karpathy-style Software 3.0 framing, Willison/Anthropic AI-assisted coding practice, eval research, agent safety, agent-config findings, OpenSpec delta-spec/change-folder/archive model, and superpowers strict executable agent skills (TDD, verification, subagent review) | You need provenance, justification, or candidate improvements grounded in external practice | Local pipeline ownership; it informs 00–05 rather than replacing them |
 
 ---
 
@@ -65,6 +65,6 @@ graph LR
 
 ## §3 | External grounding
 
-¶1 The external source map for Karpathy-style Software 3.0, Simon Willison-style production AI-assisted coding, Anthropic Claude Code practices, eval research, and agent-config research lives in [[06_External Grounding — LLM Power-User Practice]]. Use it as provenance for the 00–05 standard without bloating the stage docs.
+¶1 The external source map for Karpathy-style Software 3.0, Simon Willison-style production AI-assisted coding, Anthropic Claude Code practices, eval research, agent-config research, OpenSpec delta-spec/change-folder/archive model, and superpowers strict executable agent skills (TDD, verification, subagent review) lives in [[06_External Grounding — LLM Power-User Practice]]. These are borrowed operating patterns integrated into the methodology, not replacements for it. Use 06 as provenance for the 00–05 standard without bloating the stage docs.
 
 ---

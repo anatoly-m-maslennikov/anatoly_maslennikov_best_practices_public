@@ -36,7 +36,7 @@ Default to a deterministic Python scraper for article, docs, web post, or site/p
 - For multi-page site imports, do a dry-run or manifest first: source URL, discovered target URLs, grouping/folders, intended note paths, page counts, skipped URL patterns, and duplicate checks. Do not start broad crawling without a bounded manifest.
 - Extract main article/body content only. Exclude navigation, sidebar, footer, comments, author bio, email/signup forms, booking CTAs, ads, share widgets, and unrelated promo blocks unless the user explicitly wants them.
 - Download meaningful in-article images through the scraper into `82_ASSETS/51_attachments/` with deterministic descriptive filenames. Replace image HTML/URLs with local Obsidian embeds.
-- When using `markdownify`, verify it did not escape Obsidian embed paths such as `82\_ASSETS`; normalize them back to `![[82_ASSETS/51_attachments/file.ext]]` and keep embeds separated from adjacent prose/headings.
+- When using `markdownify`, verify it did not escape Obsidian embed paths such as `82\_ASSETS`; normalize them back to `Obsidian image embed syntax for 82_ASSETS/51_attachments/file.ext` and keep embeds separated from adjacent prose/headings.
 - Keep scraper logs and final chat reports path/count focused; do not print full copied article text in chat or logs.
 
 ## Workflow
@@ -44,7 +44,7 @@ Default to a deterministic Python scraper for article, docs, web post, or site/p
 1. Identify source type first: article/web text, repository/code template, book/file, media page, or generic source pointer.
 2. Read the live `81_REFERENCES` authoring rules and `references/source-record-contract.md`, then identify source URL, author(s), title, published/created date, domain, subtype, English topics, and the correct flat `81_REFERENCES/` area folder from user input, selected text, current note, repository metadata, book metadata, or the live web page.
 3. Fetch/verify live metadata when the user gave a URL and the current content matters. For current web/GitHub/book pages, prefer live verification over memory.
-4. For article/web text, use the web/site scraping rule: extract the full accessible main text, convert it to clean Markdown, download meaningful images into `82_ASSETS/51_attachments/`, and create/update the `81_REFERENCES/` note with `## Original text` plus local `![[...]]` image embeds where the images belong. Use descriptive image filenames based on the reference title/source; avoid overwriting existing attachments.
+4. For article/web text, use the web/site scraping rule: extract the full accessible main text, convert it to clean Markdown, download meaningful images into `82_ASSETS/51_attachments/`, and create/update the `81_REFERENCES/` note with `## Original text` plus local `Obsidian image embed syntax` image embeds where the images belong. Use descriptive image filenames based on the reference title/source; avoid overwriting existing attachments.
 5. For repositories, scan `/Users/am/Documents/Repos/` for an existing copy, clone/download if needed, then record the local path in `local_copy` and the body. Ask for approval when required for network or writes outside the vault.
 6. For books and other large files, discover the current Google Drive/book storage path before moving/downloading. Put the file there only when it is supplied or legitimately downloadable, then record the path in `gdrive_path` and the body. Ask/report if no file is available.
 7. Build the title using `author(s) - title (source domain, published)` unless the user or live rules require an established override.
@@ -55,6 +55,6 @@ Default to a deterministic Python scraper for article, docs, web post, or site/p
 ## Safety gates
 
 - Do not add `status`, `local_copy`, `gdrive_path`, or `yandex_disk` by default; use artifact pointer fields only when the corresponding artifact exists or the user explicitly requests the legacy field.
-- Do not introduce stale nested mirror paths such as `81_REFERENCES/20_PROJECTS/...`, `81_REFERENCES/32_LEARNING/11_SOFT_SKILLS/...`, or `81_REFERENCES/53_RESEARCH/32_Knowledge Systems/...`.
+- Do not introduce stale nested mirror paths such as `81_REFERENCES/...`, `81_REFERENCES/32_LEARNING/...`, or `81_REFERENCES/53_RESEARCH/...`.
 - Do not overwrite existing notes, attachments, repo clones, or Drive files without checking for collisions and getting approval when needed.
 - Do not use root-level symlink homes for source repositories. If a repo must be visible inside the vault, follow the live rule note for optional area-folder symlinks.
