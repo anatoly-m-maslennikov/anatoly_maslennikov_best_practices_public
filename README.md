@@ -1,27 +1,20 @@
 # anatoly-m-playbooks
 
-Public playbooks, prompts, and Codex-style skills that I use or have used as reusable operating patterns.
+Public prompts and Codex-style skills that I use or have used as reusable operating patterns.
 
-This README is the repo HUB: use it to jump to framework docs, skill packages, source-sync context, and the license.
+This README is the repo HUB: use it to jump to skill packages, source-sync context, the moved methodology, and the license.
 
 ## Main areas
 
 | Area | What it contains |
 |---|---|
-| [Industrial vibe coding for tool development](01_INDUSTRIAL_VIBE_CODING_TOOL_DEVELOPMENT_PLAYBOOK/) | Public methodology/playbook docs exported from vault source files. |
+| [DSET Loops Framework](https://github.com/anatoly-m-maslennikov/dset-loops-framework) | Methodology moved to a separate public repo. |
+| [Old methodology location](01_INDUSTRIAL_VIBE_CODING_TOOL_DEVELOPMENT_PLAYBOOK/README.md) | Redirect file kept for old `anatoly-m-playbooks` links. |
 | [LLM skills](11_LLM_SKILLS/) | Codex-style skill packages with prompt references and examples. |
 
-## Industrial vibe coding for tool development
+## DSET Loops Framework
 
-| Playbook | Source role |
-|---|---|
-| [Tool Development Playbook](01_INDUSTRIAL_VIBE_CODING_TOOL_DEVELOPMENT_PLAYBOOK/00_Tool%20Development%20Playbook.md) | methodology source |
-| [Spec Authoring Patterns — Service Spec Conventions](01_INDUSTRIAL_VIBE_CODING_TOOL_DEVELOPMENT_PLAYBOOK/01_Spec%20Authoring%20Patterns%20%E2%80%94%20Service%20Spec%20Conventions.md) | methodology source |
-| [Eval and Test Plan Patterns — Test Plan Authoring Conventions](01_INDUSTRIAL_VIBE_CODING_TOOL_DEVELOPMENT_PLAYBOOK/02_Eval%20and%20Test%20Plan%20Patterns%20%E2%80%94%20Test%20Plan%20Authoring%20Conventions.md) | methodology source |
-| [Implementation Plan Patterns — Service Build Conventions](01_INDUSTRIAL_VIBE_CODING_TOOL_DEVELOPMENT_PLAYBOOK/03_Implementation%20Plan%20Patterns%20%E2%80%94%20Service%20Build%20Conventions.md) | methodology source |
-| [General Build Rules — Tool Code Conventions](01_INDUSTRIAL_VIBE_CODING_TOOL_DEVELOPMENT_PLAYBOOK/04_General%20Build%20Rules%20%E2%80%94%20Tool%20Code%20Conventions.md) | methodology source |
-| [Layered Build Standard — DDD, TDD, Small Functions, Typed Gates](01_INDUSTRIAL_VIBE_CODING_TOOL_DEVELOPMENT_PLAYBOOK/05_Layered%20Build%20Standard%20%E2%80%94%20DDD%2C%20TDD%2C%20Small%20Functions%2C%20Typed%20Gates.md) | methodology source |
-| [External Grounding — LLM Power-User Practice](01_INDUSTRIAL_VIBE_CODING_TOOL_DEVELOPMENT_PLAYBOOK/06_External%20Grounding%20%E2%80%94%20LLM%20Power-User%20Practice.md) | methodology source |
+The methodology moved to a separate repository: [DSET Loops Framework](https://github.com/anatoly-m-maslennikov/dset-loops-framework).
 
 ## LLM skills
 
