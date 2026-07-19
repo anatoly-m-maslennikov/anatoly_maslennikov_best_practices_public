@@ -15,6 +15,8 @@ LOCAL_PATTERNS = (".local.",)
 CACHE_NAMES = {"__pycache__", ".DS_Store"}
 RESOURCE_DIRS = ("agents", "scripts", "references", "assets")
 SKIP_DIRS = {".git", ".hg", ".svn", "node_modules", ".venv", "venv"}
+SETTINGS_PREFIXES = ("settings.", "config.")
+ACTION_LOG_NAMES = {"action_log.local.ndjson", "action-log.local.ndjson"}
 
 
 def parse_frontmatter(text: str) -> tuple[dict[str, str], str]:
@@ -68,6 +70,32 @@ def format_command(parts: list[str]) -> str:
     return shlex.join(parts)
 
 
+def classify_state_files(rel_files: list[str]) -> tuple[list[str], list[str]]:
+    settings_files: list[str] = []
+    action_log_files: list[str] = []
+    for rel_file in rel_files:
+        path = Path(rel_file)
+        name = path.name.lower()
+        if name.startswith(SETTINGS_PREFIXES):
+            settings_files.append(rel_file)
+        if name in ACTION_LOG_NAMES or path.suffix.lower() == ".log" or "logs" in {part.lower() for part in path.parts[:-1]}:
+            action_log_files.append(rel_file)
+    return settings_files, action_log_files
+
+
+def state_review(settings_files: list[str], action_log_files: list[str], local_state: list[str]) -> list[str]:
+    checks: list[str] = []
+    if settings_files:
+        checks.append("Confirm settings contain no secrets and document defaults, precedence, types, and unknown-key handling.")
+    if action_log_files:
+        checks.append("Confirm action logs are append-only, redacted, size-limited, and excluded from publication.")
+    if local_state:
+        checks.append("Confirm every local-state file is ignored by version control and packaging.")
+    if not settings_files and not action_log_files:
+        checks.append("No settings or action-log files detected; score both needs before adding runtime state.")
+    return checks
+
+
 def suggested_checks(root: Path, scripts: list[Path]) -> list[str]:
     checks: list[str] = []
     py_files = [path for path in scripts if path.suffix.lower() == ".py"]
@@ -102,6 +130,7 @@ def audit(target: Path) -> dict[str, Any]:
     ]
     markdown_files = [path for path in files if path.suffix.lower() == ".md"]
     scripts = [path for path in files if path.suffix.lower() in {".py", ".sh", ".mjs", ".js", ".ts"}]
+    settings_files, action_log_files = classify_state_files(rel_files)
 
     result.update(
         {
@@ -114,6 +143,9 @@ def audit(target: Path) -> dict[str, Any]:
             "file_count": len(files),
             "files": rel_files,
             "local_state_candidates": local_state,
+            "settings_files": settings_files,
+            "action_log_files": action_log_files,
+            "state_review": state_review(settings_files, action_log_files, local_state),
             "large_markdown_files": [
                 {"path": str(path.relative_to(root)), "lines": line_count(path)}
                 for path in markdown_files
@@ -140,6 +172,8 @@ def to_markdown(data: dict[str, Any]) -> str:
         f"- Files: {data['file_count']}",
         f"- Scripts: {', '.join(data['script_files']) if data['script_files'] else 'none'}",
         f"- Local-state candidates: {', '.join(data['local_state_candidates']) if data['local_state_candidates'] else 'none'}",
+        f"- Settings files: {', '.join(data['settings_files']) if data['settings_files'] else 'none'}",
+        f"- Action-log files: {', '.join(data['action_log_files']) if data['action_log_files'] else 'none'}",
         "",
         "## Resource dirs",
     ]
@@ -153,6 +187,9 @@ def to_markdown(data: dict[str, Any]) -> str:
         lines.extend(["", "## Code fences"])
         for language, count in sorted(data["code_fences"].items()):
             lines.append(f"- `{language}`: {count}")
+    lines.extend(["", "## Settings and action-log review"])
+    for check in data["state_review"]:
+        lines.append(f"- {check}")
     lines.extend(["", "## Suggested checks"])
     for check in data["suggested_checks"]:
         lines.append(f"- `{check}`")

@@ -70,7 +70,7 @@ Every skill created or updated by this workflow must be usable on Linux, macOS, 
 <python> <skill-refactor-root>/scripts/skill_refactor_audit.py <target> --format markdown
 ```
 
-2. **Inventory load-bearing behavior.** Record triggers, required inputs, outputs, side effects, safety gates, scripts, templates, references, validation commands, and installation rules.
+2. **Inventory load-bearing behavior.** Record triggers, required inputs, outputs, side effects, safety gates, scripts, templates, references, validation commands, and installation rules. Score the need for settings and action logs using the heuristics below.
 3. **Delete only non-load-bearing weight.** Remove duplicated prose, stale paths, contradicted rules, repeated checklists, obsolete examples, and explanations that do not change execution. Ask before deleting anything that might remove behavior.
 4. **Move mechanics out of `SKILL.md`.** Prefer scripts for deterministic parsing, hashing, frontmatter handling, table generation, diffs, renames, and filesystem inventories. Default to portable Python for reusable helpers.
 5. **Move static bulk to resources.** Long templates, examples, schemas, prompts, and reference material belong in `references/`, `assets/`, or script templates loaded only when needed.
@@ -78,12 +78,60 @@ Every skill created or updated by this workflow must be usable on Linux, macOS, 
 7. **Preserve host conventions without hardcoding one host.** Follow the target repository's link, metadata, formatting, and navigation conventions, but keep reusable instructions free of private locations and machine-specific assumptions.
 8. **Preserve behavior.** Do not weaken overwrite protection, dirty-file gates, validation, provenance, or other safety rules. Document intentional behavior changes separately from refactoring.
 
-## Settings, logs, and local state
+## Settings and action-log methodology
 
-- Do not publish `*.local.*`, credentials, caches, generated state, or operator-specific configuration.
-- Put tunable defaults in a small documented configuration surface. Create local settings without overwriting existing operator edits.
-- Add action logs only when side effects justify them. Keep logs append-only and local unless the user explicitly requests publication.
-- Do not rely on private assistant memory or unavailable external documents for runtime behavior. Put required rules in `SKILL.md` or bundled resources.
+Do not add settings or logs to every skill. Decide independently for each target and record the rationale in the final report.
+
+### When to add settings
+
+Count one settings signal for each true condition:
+
+- the skill has at least two operator-tunable, non-secret values;
+- values vary by user, machine, workspace, provider, or environment;
+- the same values must persist across repeated runs;
+- multiple scripts need the same values;
+- users need discoverable defaults, types, or validation rules.
+
+Add a settings surface when the score is **2 or more**. Add one with a lower score only when a hardcoded value would break portability or safe reuse. Do not count credentials as a settings signal; secrets belong in environment variables or a platform secret store.
+
+When settings are justified:
+
+- version `settings.example.toml` with documented, non-secret defaults;
+- keep operator overrides in `settings.local.toml`, ignored by version control and publication;
+- create the local file only when missing and never overwrite operator edits;
+- use precedence `built-in defaults < project settings < local settings < environment or CLI overrides`;
+- validate types and unknown keys, resolve relative paths from the settings file, and use portable path handling;
+- avoid settings for a single stable value that belongs in the skill contract.
+
+### When to add an action log
+
+Count one logging signal for each true condition:
+
+- the skill writes, deletes, renames, moves, publishes, or otherwise changes durable state;
+- one run can affect multiple targets;
+- the skill changes an external system or calls a mutating API;
+- retry, resume, rollback, or duplicate prevention needs prior-run evidence;
+- failures are expensive or difficult to reconstruct;
+- auditability or explicit user review is part of the contract.
+
+Add an action log when the score is **2 or more**. Treat it as mandatory for destructive or irreversible operations unless the user explicitly declines after the risk is explained. Do not add persistent logs to read-only inspection, deterministic validation, or low-cost idempotent generation with no external side effects.
+
+When logging is justified:
+
+- use append-only `action_log.local.ndjson` unless the host project has an established equivalent;
+- write one JSON object per event with UTC timestamp, run ID, action, non-sensitive target identifier, outcome, dry-run flag, tool version, and concise error data when relevant;
+- record hashes or identifiers instead of full private content;
+- never log secrets, access tokens, credentials, or unnecessary personal data;
+- keep logs ignored and unpublished, document retention or size limits, and make logging failure non-fatal unless compliance requires otherwise.
+
+### Implementation rules
+
+- If local settings or logs are introduced, add precise ignore rules without replacing an existing ignore file.
+- Keep loaders and log writers dependency-light and shared rather than duplicating them across scripts.
+- Make settings validation fail clearly before side effects begin.
+- Make log writes append-only and safe across normal interruptions; use file locking or a per-run file when concurrent writers are possible.
+- Do not rely on private assistant memory or unavailable external documents for runtime behavior. Put required rules in `SKILL.md`, bundled resources, or versioned example settings.
+- The bundled audit helper remains settings-free and log-free because it is read-only and has no persistent operator-tunable state.
 
 ## Ask before changing
 
@@ -125,4 +173,5 @@ Report compactly:
 - before/after `SKILL.md` line count;
 - what was removed, moved, or preserved;
 - validation commands and results;
+- the settings and action-log decision, scores, and rationale;
 - remaining uncertainty or required installation follow-up.

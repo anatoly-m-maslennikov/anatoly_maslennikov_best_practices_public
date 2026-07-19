@@ -1,4 +1,4 @@
 interface:
   display_name: "Skill Refactor"
   short_description: "Create or refactor portable, lean skill packages."
-  default_prompt: "Use $skill-refactor to create or refactor this skill into a lean, script-backed, cross-platform skill that works on Linux, macOS, and Windows while preserving its contract."
+  default_prompt: "Use $skill-refactor to create or refactor this skill into a lean, script-backed, cross-platform skill that preserves its contract and decides whether settings or action logs are justified."
